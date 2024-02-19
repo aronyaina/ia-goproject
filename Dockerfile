@@ -1,0 +1,7 @@
+FROM postgres:16
+
+ENV POSTGRES_USER pguser
+ENV POSTGRES_PASSWORD pgpasswd
+ENV POSTGRES_DB ai_database 
+
+EXPOSE 5432

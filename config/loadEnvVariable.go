@@ -2,6 +2,7 @@ package config
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/spf13/viper"
 )
@@ -30,8 +31,13 @@ type Config struct {
 }
 
 func LoadConfig() (*Config, error) {
-	viper.AutomaticEnv()
-
+	viper.AddConfigPath(".")
+	viper.SetConfigName(".env")
+	viper.SetConfigType("env")
+	err := viper.ReadInConfig()
+	if err != nil {
+		panic(fmt.Errorf("fatal error config file: %w", err))
+	}
 	viper.SetDefault("DB.Host", "localhost")
 	viper.SetDefault("DB.Port", "5432")
 	viper.SetDefault("Server.Port", "8080")
@@ -41,15 +47,15 @@ func LoadConfig() (*Config, error) {
 	user := viper.GetString("DB_USER")
 	password := viper.GetString("DB_PASSWORD")
 	name := viper.GetString("DB_NAME")
-	serverPort := viper.GetString("PORT")
+	serverPort := viper.GetString("SERVER_PORT")
 	token := viper.GetString("API_TOKEN")
-	text_to_image := viper.GetString("URL_TEXT_TO_IMAGE")
-	image_to_text := viper.GetString("URL_IMAGE_TO_TEXT")
-	image_classification := viper.GetString("URL_IMAGE_CLASSIFICATION")
-	text_summerization := viper.GetString("URL_TEXT_SUMMARIZATION")
-	text_classification := viper.GetString("URL_TEXT_CLASSIFICATION")
+	textToImage := viper.GetString("URL_TEXT_TO_IMAGE")
+	imageToText := viper.GetString("URL_IMAGE_TO_TEXT")
+	imageClassification := viper.GetString("URL_IMAGE_CLASSIFICATION")
+	textSummerization := viper.GetString("URL_TEXT_SUMMERIZATION")
+	textClassification := viper.GetString("URL_TEXT_CLASSIFICATION")
 
-	if host == "" || port == "" || user == "" || password == "" || name == "" || serverPort == "" || token == "" || text_to_image == "" || image_to_text == "" || image_classification == "" || text_classification == "" || text_summerization == "" {
+	if host == "" || port == "" || user == "" || password == "" || name == "" || serverPort == "" || token == "" || textToImage == "" || imageToText == "" || imageClassification == "" || textClassification == "" || textSummerization == "" {
 		return nil, errors.New("missing required environment variables")
 	}
 
@@ -64,10 +70,11 @@ func LoadConfig() (*Config, error) {
 		Server: ServerConfig{
 			Port:                serverPort,
 			Token:               token,
-			TextToImage:         text_to_image,
-			ImageToText:         image_to_text,
-			ImageClassification: image_classification,
-			TextSummerization:   text_summerization,
+			TextToImage:         textToImage,
+			ImageToText:         imageToText,
+			ImageClassification: imageClassification,
+			TextSummerization:   textSummerization,
+			TextClassification:  textClassification,
 		},
 	}
 

@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"log"
 	"net/http"
-	"os"
 	"path/filepath"
 
 	"github.com/aronyaina/ia-goproject/config"
@@ -14,29 +13,23 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Payload struct {
-	Inputs string `json:"inputs"`
-}
-
-func init() {
-	configuration, err = config.LoadConfig()
+func main() {
+	configuration, err := config.LoadConfig()
 	if err != nil {
 		panic(err)
 	}
-}
-func main() {
 	r := gin.Default()
 	r.Use(cors.Default())
 	r.MaxMultipartMemory = 8 << 20
 
 	r.POST("/text-to-images/generate", func(c *gin.Context) {
-		var payload Payload
+		var payload services.Payload
 		if err := c.ShouldBindJSON(&payload); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 
-		imageBytes, err := services.TextToImageQuery(os.Getenv("URL_TEXT_TO_IMAGE"), os.Getenv("API_TOKEN"), payload)
+		imageBytes, err := services.TextToImageQuery(configuration.Server.TextToImage, configuration.Server.Token, payload)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
@@ -61,7 +54,7 @@ func main() {
 
 	r.POST("/image-to-text", func(c *gin.Context) {
 		dirName := services.ImageUploader(c)
-		output, err := services.ImageToText(dirName, os.Getenv("URL_IMAGE_TO_TEXT"), os.Getenv("API_TOKEN"))
+		output, err := services.ImageToText(dirName, configuration.Server.ImageToText, configuration.Server.Token)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
@@ -81,7 +74,7 @@ func main() {
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		}
-		output, err := services.ImageToText(filename, os.Getenv("URL_IMAGE_CLASSIFICATION"), os.Getenv("API_TOKEN"))
+		output, err := services.ImageToText(filename, configuration.Server.ImageToText, configuration.Server.Token)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -91,12 +84,12 @@ func main() {
 	})
 
 	r.POST("/text-to-texts/generate", func(c *gin.Context) {
-		var payload Payload
+		var payload services.Payload
 		if err := c.ShouldBindJSON(&payload); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		response, err := services.TextToText(payload, os.Getenv("URL_TEXT_SUMMERIZATION"), os.Getenv("API_TOKEN"))
+		response, err := services.TextToText(payload, configuration.Server.TextSummerization, configuration.Server.Token)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
@@ -105,12 +98,12 @@ func main() {
 	})
 
 	r.POST("/text-classifications", func(c *gin.Context) {
-		var payload Payload
+		var payload services.Payload
 		if err := c.ShouldBindJSON(&payload); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		response, err := services.TextToText(payload, os.Getenv("URL_TEXT_CLASSIFICATION"), os.Getenv("API_TOKEN"))
+		response, err := services.TextToText(payload, configuration.Server.TextClassification, configuration.Server.Token)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return

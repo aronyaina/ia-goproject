@@ -10,7 +10,7 @@ import (
 var DB *gorm.DB
 
 func connectToDB() {
-
+	var err error
 	config, err := LoadConfig()
 	if err != nil {
 		panic(err)
@@ -22,7 +22,7 @@ func connectToDB() {
 		config.DB.Password,
 		config.DB.Name,
 		config.DB.Port)
-	DB, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}

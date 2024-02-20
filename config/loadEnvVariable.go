@@ -62,7 +62,12 @@ func LoadConfig() (*Config, error) {
 			Name:     name,
 		},
 		Server: ServerConfig{
-			Port: serverPort,
+			Port:                serverPort,
+			Token:               token,
+			TextToImage:         text_to_image,
+			ImageToText:         image_to_text,
+			ImageClassification: image_classification,
+			TextSummerization:   text_summerization,
 		},
 	}
 

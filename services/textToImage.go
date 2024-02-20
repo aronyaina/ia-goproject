@@ -7,6 +7,10 @@ import (
 	"net/http"
 )
 
+type Payload struct {
+	Inputs string `json:"inputs"`
+}
+
 func TextToImageQuery(url string, token string, payload Payload) ([]byte, error) {
 	payloadBytes, err := json.Marshal(payload)
 	if err != nil {

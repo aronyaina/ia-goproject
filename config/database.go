@@ -9,7 +9,7 @@ import (
 
 var DB *gorm.DB
 
-func connectToDB() {
+func ConnectToDB() {
 	var err error
 	config, err := LoadConfig()
 	if err != nil {

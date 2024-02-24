@@ -7,12 +7,16 @@ import (
 	"path/filepath"
 
 	"github.com/aronyaina/ia-goproject/config"
+	"github.com/aronyaina/ia-goproject/controllers"
 	"github.com/aronyaina/ia-goproject/services"
 	"github.com/disintegration/imaging"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
+func init() {
+	config.ConnectToDB()
+}
 func main() {
 	configuration, err := config.LoadConfig()
 	if err != nil {
@@ -111,5 +115,21 @@ func main() {
 		c.JSON(http.StatusOK, response)
 	})
 
+	r.POST("/users", func(c *gin.Context) {
+		var payload controllers.UserPayload
+		if err := c.ShouldBindJSON(&payload); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		controllers.CreateUser(c, payload)
+	})
+
+	r.GET("/users", func(c *gin.Context) {
+		controllers.GetAllUser(c)
+	})
+	r.GET("/users/:id", func(c *gin.Context) {
+		id := c.Param("id")
+		controllers.GetUserById(c, id)
+	})
 	r.Run(":8080")
 }

@@ -16,7 +16,7 @@ func ConnectToDB() {
 		panic(err)
 	}
 
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=false",
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
 		config.DB.Host,
 		config.DB.User,
 		config.DB.Password,

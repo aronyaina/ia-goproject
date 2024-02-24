@@ -1,0 +1,18 @@
+services:
+  ai-postgres:
+    container_name: ai-postgres
+    build:
+      context: .
+      dockerfile: dockerfile.postgres
+    environment:
+      - POSTGRES_DB=ai_database
+      - POSTGRES_USER=pguser
+      - POSTGRES_PASSWORD=pgpasswd
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./ai-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  ai-data:

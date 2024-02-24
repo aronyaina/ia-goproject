@@ -10,12 +10,12 @@ import (
 type Prompt struct {
 	gorm.Model `json:"-"`
 
-	ID        string    `gorm:"primary_key;type:uuid;default:uuid_generate_v4()" json:"id"`
+	ID        string    `gorm:"primary_key;unique" json:"id"`
 	Tag       string    `gorm:"size:255;unique;not null" json:"tag"`
-	Results   string    `gorm:"type:text" json:"results"`
-	UserID    string    `gorm:"not null" json:"user_id"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	Result    string    `gorm:"type:text" json:"result"`
+	UserID    string    `gorm:"not null" json:"userId"`
+	CreatedAt time.Time `json:"-"`
+	UpdatedAt time.Time `json:"-"`
 
 	User *User `gorm:"foreignKey:UserID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 }

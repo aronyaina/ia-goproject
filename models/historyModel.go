@@ -10,12 +10,12 @@ import (
 type History struct {
 	gorm.Model `json:"-"`
 
-	ID        string    `gorm:"primary_key;type:uuid;default:uuid_generate_v4()" json:"id"`
+	ID        string    `gorm:"primary_key;unique" json:"id"`
 	Title     string    `gorm:"size:255;not null" json:"title"`
-	UserID    string    `gorm:"not null" json:"user_id"`
-	PromptID  string    `gorm:"not null" json:"prompt_id"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	UserID    string    `gorm:"not null" json:"userId"`
+	PromptID  string    `gorm:"not null" json:"promptId"`
+	CreatedAt time.Time `json:"-"`
+	UpdatedAt time.Time `json:"-"`
 
 	User   *User   `gorm:"foreignKey:UserID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 	Prompt *Prompt `gorm:"foreignKey:PromptID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`

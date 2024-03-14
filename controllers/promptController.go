@@ -1,12 +1,9 @@
 package controllers
 
 import (
-	"time"
-
 	"github.com/aronyaina/ia-goproject/config"
 	"github.com/aronyaina/ia-goproject/models"
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
 type PromptPayload struct {
@@ -15,30 +12,27 @@ type PromptPayload struct {
 	UserID string `json:"user_id"`
 }
 
-func CreatePrompt(c *gin.Context, payload PromptPayload) {
-	prompt := models.Prompt{
-		ID:        uuid.New().String(),
-		Tag:       payload.Tag,
-		Result:    payload.Result,
-		UserID:    payload.UserID,
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
-	}
+// func CreatePrompt(c *gin.Context, tag string, result []map[string]interface{}, user_id string) {
+// 	prompt := models.Prompt{
+// 		ID:        uuid.New().String(),
+// 		Tag:       tag,
+// 		Result:    result,
+// 		UserID:    user_id,
+// 		CreatedAt: time.Now(),
+// 		UpdatedAt: time.Now(),
+// 	}
 
-	config.ConnectToDB()
-	result := config.DB.Create(&prompt)
+// 	config.ConnectToDB()
+// 	response := config.DB.Create(&prompt)
+// 	if response.Error != nil {
+// 		c.JSON(500, gin.H{"error": response.Error.Error()})
+// 	}
+// }
 
-	if result.Error != nil {
-		c.JSON(500, gin.H{"error": result.Error.Error()})
-	} else {
-		c.JSON(200, gin.H{"User": prompt})
-	}
-}
-
-func GetAllPromptByUserId(c *gin.Context, user_id string) {
+func GetAllPromptByUserId(c *gin.Context) {
 	config.ConnectToDB()
 	var prompts models.Prompt
-	result := config.DB.Where("UserID =?", user_id).Find(&prompts)
+	result := config.DB.Where("UserID =?", c.Param("user_id")).Find(&prompts)
 
 	if result.Error != nil {
 		c.JSON(500, gin.H{"error": result.Error.Error()})
@@ -47,10 +41,10 @@ func GetAllPromptByUserId(c *gin.Context, user_id string) {
 	}
 }
 
-func GetOnePromptById(c *gin.Context, id string) {
+func GetOnePromptById(c *gin.Context) {
 	config.ConnectToDB()
 	var prompt models.Prompt
-	result := config.DB.Where("ID =?", id).First(&prompt)
+	result := config.DB.Where("ID =?", c.Param("id")).First(&prompt)
 
 	if result.Error != nil {
 		c.JSON(500, gin.H{"error": result.Error.Error()})
@@ -59,10 +53,10 @@ func GetOnePromptById(c *gin.Context, id string) {
 	}
 }
 
-func deleteOnePromptById(c *gin.Context, id string) {
+func deleteOnePromptById(c *gin.Context) {
 	config.ConnectToDB()
 	var prompt models.Prompt
-	result := config.DB.Where("ID =?", id).Delete(&prompt)
+	result := config.DB.Where("ID =?", c.Param("id")).Delete(&prompt)
 
 	if result.Error != nil {
 		c.JSON(500, gin.H{"error": result.Error.Error()})

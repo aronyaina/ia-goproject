@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"net/http"
 	"time"
 
 	"github.com/aronyaina/ia-goproject/config"
@@ -15,7 +16,12 @@ type historyPayload struct {
 	PromptId string `json:"prompt_id"`
 }
 
-func CreateHistory(c *gin.Context, payload historyPayload) {
+func CreateHistory(c *gin.Context) {
+	var payload historyPayload
+	if err := c.ShouldBindJSON(&payload); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 	history := models.History{
 		ID:        uuid.New().String(),
 		Title:     payload.Title,
@@ -35,10 +41,10 @@ func CreateHistory(c *gin.Context, payload historyPayload) {
 	}
 }
 
-func DeleteHistoryById(c *gin.Context, id string) {
+func DeleteHistoryById(c *gin.Context) {
 	config.ConnectToDB()
 	var history models.History
-	result := config.DB.Where("ID =?", id).Delete(&history)
+	result := config.DB.Where("ID =?", c.Param("id")).Delete(&history)
 
 	if result.Error != nil {
 		c.JSON(500, gin.H{"error": result.Error.Error()})
@@ -47,10 +53,10 @@ func DeleteHistoryById(c *gin.Context, id string) {
 	}
 }
 
-func GetAllHistoryByUserID(c *gin.Context, user_id string) {
+func GetAllHistoryByUserID(c *gin.Context) {
 	config.ConnectToDB()
 	var history models.Prompt
-	result := config.DB.Where("UserID =?", user_id).Find(&history)
+	result := config.DB.Where("UserID =?", c.Param("user_id")).Find(&history)
 
 	if result.Error != nil {
 		c.JSON(500, gin.H{"error": result.Error.Error()})

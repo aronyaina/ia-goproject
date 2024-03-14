@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"net/http"
 	"time"
 
 	"github.com/aronyaina/ia-goproject/config"
@@ -15,7 +16,12 @@ type UserPayload struct {
 	Password string `json:"password"`
 }
 
-func CreateUser(c *gin.Context, payload UserPayload) {
+func CreateUser(c *gin.Context) {
+	var payload UserPayload
+	if err := c.ShouldBindJSON(&payload); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 	user := models.User{
 		ID:        uuid.New().String(),
 		Name:      payload.Name,
@@ -46,10 +52,10 @@ func GetAllUser(c *gin.Context) {
 	}
 }
 
-func GetUserById(c *gin.Context, id string) {
+func GetUserById(c *gin.Context) {
 	config.ConnectToDB()
 	var user models.User
-	result := config.DB.Where("ID =?", id).First(&user)
+	result := config.DB.Where("ID =?", c.Param("id")).First(&user)
 
 	if result.Error != nil {
 		c.JSON(500, gin.H{"error": result.Error.Error()})

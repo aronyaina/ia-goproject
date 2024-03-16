@@ -36,7 +36,7 @@ func CreateUser(c *gin.Context) {
 	if result.Error != nil {
 		c.JSON(500, gin.H{"error": result.Error.Error()})
 	} else {
-		c.JSON(200, gin.H{"User": user})
+		c.JSON(200, user)
 	}
 }
 
@@ -48,18 +48,19 @@ func GetAllUser(c *gin.Context) {
 	if result.Error != nil {
 		c.JSON(500, gin.H{"error": result.Error.Error()})
 	} else {
-		c.JSON(200, gin.H{"Users": users})
+		c.JSON(200, users)
 	}
 }
 
 func GetUserById(c *gin.Context) {
 	config.ConnectToDB()
 	var user models.User
+
 	result := config.DB.Where("ID =?", c.Param("id")).First(&user)
 
 	if result.Error != nil {
 		c.JSON(500, gin.H{"error": result.Error.Error()})
 	} else {
-		c.JSON(200, gin.H{"User": user})
+		c.JSON(200, user)
 	}
 }

@@ -1,9 +1,12 @@
 package controllers
 
 import (
+	"time"
+
 	"github.com/aronyaina/ia-goproject/config"
 	"github.com/aronyaina/ia-goproject/models"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type PromptPayload struct {
@@ -12,22 +15,23 @@ type PromptPayload struct {
 	UserID string `json:"user_id"`
 }
 
-// func CreatePrompt(c *gin.Context, tag string, result []map[string]interface{}, user_id string) {
-// 	prompt := models.Prompt{
-// 		ID:        uuid.New().String(),
-// 		Tag:       tag,
-// 		Result:    result,
-// 		UserID:    user_id,
-// 		CreatedAt: time.Now(),
-// 		UpdatedAt: time.Now(),
-// 	}
+func CreatePrompt(c *gin.Context, tag string, result string, image_name string, user_id string) {
+	prompt := models.Prompt{
+		ID:        uuid.New().String(),
+		Tag:       tag,
+		Result:    result,
+		ImageName: image_name,
+		UserID:    user_id,
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+	}
 
-// 	config.ConnectToDB()
-// 	response := config.DB.Create(&prompt)
-// 	if response.Error != nil {
-// 		c.JSON(500, gin.H{"error": response.Error.Error()})
-// 	}
-// }
+	config.ConnectToDB()
+	response := config.DB.Create(&prompt)
+	if response.Error != nil {
+		c.JSON(500, gin.H{"error": response.Error.Error()})
+	}
+}
 
 func GetAllPromptByUserId(c *gin.Context) {
 	config.ConnectToDB()
@@ -37,19 +41,7 @@ func GetAllPromptByUserId(c *gin.Context) {
 	if result.Error != nil {
 		c.JSON(500, gin.H{"error": result.Error.Error()})
 	} else {
-		c.JSON(200, gin.H{"Prompts": prompts})
-	}
-}
-
-func GetOnePromptById(c *gin.Context) {
-	config.ConnectToDB()
-	var prompt models.Prompt
-	result := config.DB.Where("ID =?", c.Param("id")).First(&prompt)
-
-	if result.Error != nil {
-		c.JSON(500, gin.H{"error": result.Error.Error()})
-	} else {
-		c.JSON(200, gin.H{"User": prompt})
+		c.JSON(200, prompts)
 	}
 }
 
@@ -61,6 +53,6 @@ func deleteOnePromptById(c *gin.Context) {
 	if result.Error != nil {
 		c.JSON(500, gin.H{"error": result.Error.Error()})
 	} else {
-		c.JSON(200, gin.H{"User": prompt})
+		c.JSON(200, prompt)
 	}
 }

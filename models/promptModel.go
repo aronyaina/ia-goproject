@@ -11,8 +11,9 @@ type Prompt struct {
 	gorm.Model `json:"-"`
 
 	ID        string    `gorm:"primary_key;unique" json:"id"`
-	Tag       string    `gorm:"size:255;unique;not null" json:"tag"`
+	Tag       string    `gorm:"size:255;not null" json:"tag"`
 	Result    string    `gorm:"type:text" json:"result"`
+	ImageName string    `gorm:"type:text" json:"image_name"`
 	UserID    string    `gorm:"not null" json:"userId"`
 	CreatedAt time.Time `json:"-"`
 	UpdatedAt time.Time `json:"-"`

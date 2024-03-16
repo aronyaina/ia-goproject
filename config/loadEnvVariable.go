@@ -56,7 +56,7 @@ func LoadConfig() (*Config, error) {
 	textClassification := viper.GetString("URL_TEXT_CLASSIFICATION")
 
 	if host == "" || port == "" || user == "" || password == "" || name == "" || serverPort == "" || token == "" || textToImage == "" || imageToText == "" || imageClassification == "" || textClassification == "" || textSummerization == "" {
-		return nil, errors.New("missing required environment variables")
+		return nil, errors.New("Missing required environment variables .")
 	}
 
 	db := &Config{

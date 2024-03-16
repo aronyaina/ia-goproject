@@ -3,7 +3,6 @@ package config
 import (
 	"fmt"
 
-	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -31,9 +30,9 @@ func ConnectToDB() {
 
 }
 
-func ApiMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.Set("databaseConn", DB)
-		c.Next()
-	}
-}
+// func ApiMiddleware() gin.HandlerFunc {
+// 	return func(c *gin.Context) {
+// 		c.Set("databaseConn", DB)
+// 		c.Next()
+// 	}
+// }

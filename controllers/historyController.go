@@ -37,7 +37,7 @@ func CreateHistory(c *gin.Context) {
 	if result.Error != nil {
 		c.JSON(500, gin.H{"error": result.Error.Error()})
 	} else {
-		c.JSON(200, gin.H{"User": history})
+		c.JSON(200, history)
 	}
 }
 
@@ -49,7 +49,7 @@ func DeleteHistoryById(c *gin.Context) {
 	if result.Error != nil {
 		c.JSON(500, gin.H{"error": result.Error.Error()})
 	} else {
-		c.JSON(200, gin.H{"User": history})
+		c.JSON(200, history)
 	}
 }
 
@@ -61,6 +61,6 @@ func GetAllHistoryByUserID(c *gin.Context) {
 	if result.Error != nil {
 		c.JSON(500, gin.H{"error": result.Error.Error()})
 	} else {
-		c.JSON(200, gin.H{"Prompts": history})
+		c.JSON(200, history)
 	}
 }

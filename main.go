@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/aronyaina/ia-goproject/config"
@@ -9,17 +10,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var configuration *config.Config
-
-func init() {
-	var err error
-	configuration, err = config.LoadConfig()
+func main() {
+	cfg, err := config.LoadConfig()
 	if err != nil {
 		log.Fatalln(err)
 	}
-}
-
-func main() {
+	fmt.Println("Loading configuration file ...")
 	config.ConnectToDB()
 	r := gin.Default()
 	// r.Use(config.ApiMiddleware())
@@ -27,7 +23,8 @@ func main() {
 	r.MaxMultipartMemory = 8 << 20
 
 	routers.SetupUserRoutes(r)
-	routers.SetupImageRoutes(r, configuration)
-	routers.SetupTextRoutes(r)
+	routers.SetupImageRoutes(r, cfg)
+	routers.SetupTextRoutes(r, cfg)
+	routers.SetupPromptRoutes(r)
 	r.Run(":8080")
 }

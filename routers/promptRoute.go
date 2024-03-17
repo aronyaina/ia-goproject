@@ -8,6 +8,7 @@ import (
 func SetupPromptRoutes(router *gin.Engine) {
 	promptRouter := router.Group("/prompts")
 	{
-		promptRouter.GET("/", controllers.GetAllPromptByUserId)
+		promptRouter.GET("/:user_id", controllers.GetAllPromptByUserId)
+		promptRouter.DELETE("/", controllers.DeleteOnePromptById)
 	}
 }

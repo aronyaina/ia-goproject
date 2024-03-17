@@ -13,12 +13,10 @@ type Prompt struct {
 	ID        string    `gorm:"primary_key;unique" json:"id"`
 	Tag       string    `gorm:"size:255;not null" json:"tag"`
 	Result    string    `gorm:"type:text" json:"result"`
-	ImageName string    `gorm:"type:text" json:"image_name"`
-	UserID    string    `gorm:"not null" json:"userId"`
+	ImageName string    `gorm:"type:text" json:"image_id"`
+	UserID    string    `gorm:"not null" json:"user_id"`
 	CreatedAt time.Time `json:"-"`
 	UpdatedAt time.Time `json:"-"`
-
-	User *User `gorm:"foreignKey:UserID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 }
 
 func (p *Prompt) BeforeSave(tx *gorm.DB) (err error) {

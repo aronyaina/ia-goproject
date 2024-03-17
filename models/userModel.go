@@ -15,4 +15,6 @@ type User struct {
 	Password  string    `gorm:"size:255;not null" json:"password"`
 	CreatedAt time.Time `json:"-"`
 	UpdatedAt time.Time `json:"-"`
+
+	Prompt []Prompt `gorm:"foreignKey:UserID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 }

@@ -17,6 +17,4 @@ func main() {
 	config.DB.AutoMigrate(&models.User{})
 	fmt.Println("Migrating Prompt")
 	config.DB.AutoMigrate(&models.Prompt{})
-	fmt.Println("Migrating History")
-	config.DB.AutoMigrate(&models.History{})
 }

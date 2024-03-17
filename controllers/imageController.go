@@ -5,7 +5,6 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/aronyaina/ia-goproject/config"
@@ -15,17 +14,15 @@ import (
 	"github.com/google/uuid"
 )
 
-var configuration *config.Config
-
 func ImageToText(c *gin.Context, config *config.Config) {
-	if config != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": errors.New("No configuration provided.")})
+	if config == nil {
+		handleError(c, errors.New("No configuration provided."), http.StatusBadRequest)
 		return
 	}
 	dirName := services.ImageUploader(c)
-	output, err := services.ImageToText(dirName, configuration.Server.ImageToText, configuration.Server.Token)
+	output, err := services.ImageToText(dirName, config.Server.ImageToText, config.Server.Token)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		handleError(c, err, http.StatusBadRequest)
 		return
 	}
 
@@ -36,32 +33,34 @@ func ImageToText(c *gin.Context, config *config.Config) {
 
 	done := make(chan bool)
 	go func() {
-		CreatePrompt(c, "IMAGE_TO_TEXT", text, dirName, c.Param("user_id"))
+		services.CreatePrompt(c, "IMAGE_TO_TEXT", text, dirName, c.Param("user_id"))
 		done <- true
 	}()
 	<-done
 
-	fmt.Println("0. Test Passed")
-
-	c.JSON(http.StatusOK, output)
+	c.JSON(http.StatusOK, output[0])
 }
 
-func TextToImage(c *gin.Context) {
+func TextToImage(c *gin.Context, config *config.Config) {
+	if config == nil {
+		handleError(c, errors.New("No configuration provided."), http.StatusBadRequest)
+		return
+	}
 	var payload services.Payload
 	if err := c.ShouldBindJSON(&payload); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		handleError(c, err, http.StatusBadRequest)
 		return
 	}
 
-	imageBytes, err := services.TextToImageQuery(configuration.Server.TextToImage, configuration.Server.Token, payload)
+	imageBytes, err := services.TextToImageQuery(config.Server.TextToImage, config.Server.Token, payload)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		handleError(c, err, http.StatusInternalServerError)
 		return
 	}
 
 	image, err := imaging.Decode(bytes.NewReader(imageBytes))
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		handleError(c, err, http.StatusInternalServerError)
 		return
 	}
 
@@ -75,34 +74,34 @@ func TextToImage(c *gin.Context) {
 	}
 
 	imageData := base64.StdEncoding.EncodeToString(imageBytes)
-	CreatePrompt(c, "TEXT_TO_IMAGE", "assets/"+outputFilename, "assets/"+outputFilename, c.Param("user_id"))
+	services.CreatePrompt(c, "TEXT_TO_IMAGE", "assets/"+outputFilename, "assets/"+outputFilename, c.Param("user_id"))
 	c.JSON(http.StatusOK, imageData)
 }
 
-func ImageClassification(c *gin.Context) {
-	configuration, err := config.LoadConfig()
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+func ImageClassification(c *gin.Context, config *config.Config) {
+	if config == nil {
+		handleError(c, errors.New("No configuration provided."), http.StatusBadRequest)
 		return
 	}
-
 	dirName := services.ImageUploader(c)
 
+	output, err := services.ImageToText(dirName, config.Server.ImageClassification, config.Server.Token)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-	}
-	output, err := services.ImageToText(dirName, configuration.Server.ImageClassification, configuration.Server.Token)
-	if err != nil {
-		log.Fatal(err)
+		handleError(c, err, http.StatusBadRequest)
 	}
 
 	bestLabel := output[0]["label"].(string)
 	done := make(chan bool)
 	go func() {
-		CreatePrompt(c, "IMAGE_CLASSIFICATION", bestLabel, dirName, c.Param("user_id"))
+		services.CreatePrompt(c, "IMAGE_CLASSIFICATION", bestLabel, dirName, c.Param("user_id"))
 		done <- true
 	}()
 	<-done
 
 	c.JSON(http.StatusOK, output)
+}
+
+func handleError(c *gin.Context, err error, statusCode int) {
+	fmt.Println(err)
+	c.JSON(statusCode, gin.H{"error": err.Error()})
 }

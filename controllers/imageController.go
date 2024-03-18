@@ -16,7 +16,7 @@ import (
 
 func ImageToText(c *gin.Context, config *config.Config) {
 	if config == nil {
-		handleError(c, errors.New("No configuration provided."), http.StatusBadRequest)
+		handleError(c, errors.New("no configuration provided"), http.StatusBadRequest)
 		return
 	}
 	dirName := services.ImageUploader(c)
@@ -33,7 +33,7 @@ func ImageToText(c *gin.Context, config *config.Config) {
 
 	done := make(chan bool)
 	go func() {
-		services.CreatePrompt(c, "IMAGE_TO_TEXT", text, dirName, c.Param("user_id"))
+		services.CreatePrompt(c, "IMAGE_TO_TEXT", dirName, text, c.Param("user_id"))
 		done <- true
 	}()
 	<-done
@@ -43,7 +43,7 @@ func ImageToText(c *gin.Context, config *config.Config) {
 
 func TextToImage(c *gin.Context, config *config.Config) {
 	if config == nil {
-		handleError(c, errors.New("No configuration provided."), http.StatusBadRequest)
+		handleError(c, errors.New("no configuration provided"), http.StatusBadRequest)
 		return
 	}
 	var payload services.Payload
@@ -74,13 +74,13 @@ func TextToImage(c *gin.Context, config *config.Config) {
 	}
 
 	imageData := base64.StdEncoding.EncodeToString(imageBytes)
-	services.CreatePrompt(c, "TEXT_TO_IMAGE", "assets/"+outputFilename, "assets/"+outputFilename, c.Param("user_id"))
+	services.CreatePrompt(c, "TEXT_TO_IMAGE", payload.Inputs, "assets/"+outputFilename, c.Param("user_id"))
 	c.JSON(http.StatusOK, imageData)
 }
 
 func ImageClassification(c *gin.Context, config *config.Config) {
 	if config == nil {
-		handleError(c, errors.New("No configuration provided."), http.StatusBadRequest)
+		handleError(c, errors.New("no configuration provided"), http.StatusBadRequest)
 		return
 	}
 	dirName := services.ImageUploader(c)
@@ -93,7 +93,7 @@ func ImageClassification(c *gin.Context, config *config.Config) {
 	bestLabel := output[0]["label"].(string)
 	done := make(chan bool)
 	go func() {
-		services.CreatePrompt(c, "IMAGE_CLASSIFICATION", bestLabel, dirName, c.Param("user_id"))
+		services.CreatePrompt(c, "IMAGE_CLASSIFICATION", dirName, bestLabel, c.Param("user_id"))
 		done <- true
 	}()
 	<-done

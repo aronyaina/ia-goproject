@@ -9,12 +9,12 @@ import (
 	"github.com/google/uuid"
 )
 
-func CreatePrompt(c *gin.Context, tag string, result string, image_name string, user_id string) {
+func CreatePrompt(c *gin.Context, tag string, input string, result string, user_id string) {
 	prompt := models.Prompt{
 		ID:        uuid.New().String(),
 		Tag:       tag,
 		Result:    result,
-		ImageName: image_name,
+		Input:     input,
 		UserID:    user_id,
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),

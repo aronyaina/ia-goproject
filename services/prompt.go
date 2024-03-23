@@ -1,6 +1,7 @@
 package services
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/aronyaina/ia-goproject/config"
@@ -22,6 +23,8 @@ func CreatePrompt(c *gin.Context, tag string, input string, result string, user_
 
 	config.ConnectToDB()
 	response := config.DB.Create(&prompt)
+	fmt.Println("Prompt data created successfully")
+
 	if response.Error != nil {
 		c.JSON(500, gin.H{"error": response.Error.Error()})
 	}

@@ -30,11 +30,12 @@ func TextToText(payload Payload, api string, token string) ([]interface{}, error
 	if err != nil {
 		return nil, err
 	}
-	var result interface{}
+
+	var result []interface{}
 	if err := json.Unmarshal(body, &result); err != nil {
 		return nil, err
 	}
-	return ConvertToInterfaceSlice(result), err
+	return ConvertToInterfaceSlice(result[0]), err
 }
 
 func ConvertToInterfaceSlice(data interface{}) []interface{} {

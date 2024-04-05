@@ -1,0 +1,306 @@
+{
+	"info": {
+		"_postman_id": "50ea429e-c0d2-4994-baa6-42bea111a1bc",
+		"name": "ai_project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24342780",
+		"_collection_link": "https://blue-water-527248.postman.co/workspace/New-Team-Workspace~efcadd1b-b07b-4278-8a6c-70061af61588/collection/24342780-50ea429e-c0d2-4994-baa6-42bea111a1bc?action=share&source=collection_link&creator=24342780"
+	},
+	"item": [
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Kali\",\n    \"email\":\"kali@gmail.com\",\n    \"password\": \"kalikali\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "userById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/users/7f6d9015-ecea-47b8-9c73-84a1ad54c476",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"7f6d9015-ecea-47b8-9c73-84a1ad54c476"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "prompts",
+			"item": [
+				{
+					"name": "getPromptsByUserById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/prompts/7f6d9015-ecea-47b8-9c73-84a1ad54c476",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"prompts",
+								"7f6d9015-ecea-47b8-9c73-84a1ad54c476"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deletePromptsById",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/prompts/7f6d9015-ecea-47b8-9c73-84a1ad54c476",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"prompts",
+								"7f6d9015-ecea-47b8-9c73-84a1ad54c476"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "images",
+			"item": [
+				{
+					"name": "image-to-text",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "image/jpeg",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"contentType": "multipart/form-data",
+									"type": "file",
+									"src": "/home/cookiss/Pictures/horse.jpeg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/images/text/7f6d9015-ecea-47b8-9c73-84a1ad54c476",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"images",
+								"text",
+								"7f6d9015-ecea-47b8-9c73-84a1ad54c476"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "image-classification",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "image/jpeg",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"contentType": "multipart/form-data",
+									"type": "file",
+									"src": "/home/cookiss/Pictures/papillon.jpeg"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/images/classification/7f6d9015-ecea-47b8-9c73-84a1ad54c476",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"images",
+								"classification",
+								"7f6d9015-ecea-47b8-9c73-84a1ad54c476"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "text-to-image",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"inputs\":\"A course of red horse and black horse\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/images/image/7f6d9015-ecea-47b8-9c73-84a1ad54c476",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"images",
+								"image",
+								"7f6d9015-ecea-47b8-9c73-84a1ad54c476"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "texts",
+			"item": [
+				{
+					"name": "text-classifications",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"inputs\":\"The year is 2142. Humanity has colonized the Moon, creating a vast, domed megacity known as Luna Nova. Life on Earth is no longer sustainable due to the relentless effects of climate change. Tensions simmer between Luna Nova, a technological marvel, and Earth, a ravaged and resource-depleted planet. Amara Khan, a brilliant but rebellious young engineer on Luna Nova, stumbles upon a hidden message – a plea for help from a resistance group on Earth. The message ignites a fire within Amara, forcing her to question everything she thought she knew about her home and the history of the exodus to the moon. Meanwhile, on Earth, Kai, a resourceful scavenger, leads a group of survivors in a hidden settlement. Their world is one of constant struggle, but whispers of a potential savior from Luna Nova have reached their ears. When Amara makes a daring escape from Luna Nova, she crash-lands on Earth, thrown into the heart of Kai’s world. Their initial distrust soon gives way to a shared purpose – to bridge the divide between their people and forge a new future for humanity, on a broken but resilient Earth. Their journey is fraught with danger – ruthless scavengers, hidden agendas within Luna Nova, and the ever-present threat of the unforgiving environment. But Amara and Kai, along with their newfound allies, possess the courage and ingenuity to fight for a second chance for their people.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/texts/classification/7f6d9015-ecea-47b8-9c73-84a1ad54c476",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"texts",
+								"classification",
+								"7f6d9015-ecea-47b8-9c73-84a1ad54c476"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "text-summerizations",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"inputs\":\"The year is 2142. Humanity has colonized the Moon, creating a vast, domed megacity known as Luna Nova. Life on Earth is no longer sustainable due to the relentless effects of climate change. Tensions simmer between Luna Nova, a technological marvel, and Earth, a ravaged and resource-depleted planet. Amara Khan, a brilliant but rebellious young engineer on Luna Nova, stumbles upon a hidden message – a plea for help from a resistance group on Earth. The message ignites a fire within Amara, forcing her to question everything she thought she knew about her home and the history of the exodus to the moon. Meanwhile, on Earth, Kai, a resourceful scavenger, leads a group of survivors in a hidden settlement. Their world is one of constant struggle, but whispers of a potential savior from Luna Nova have reached their ears. When Amara makes a daring escape from Luna Nova, she crash-lands on Earth, thrown into the heart of Kai’s world. Their initial distrust soon gives way to a shared purpose – to bridge the divide between their people and forge a new future for humanity, on a broken but resilient Earth. Their journey is fraught with danger – ruthless scavengers, hidden agendas within Luna Nova, and the ever-present threat of the unforgiving environment. But Amara and Kai, along with their newfound allies, possess the courage and ingenuity to fight for a second chance for their people.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/texts/text/7f6d9015-ecea-47b8-9c73-84a1ad54c476",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"texts",
+								"text",
+								"7f6d9015-ecea-47b8-9c73-84a1ad54c476"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

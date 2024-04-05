@@ -58,3 +58,8 @@ go run .
 ```
 
 And that's it
+
+
+# ALL ROUTES
+All routes are saved inside the ai-project.postman.file
+

@@ -1,4 +1,6 @@
 This server will serve image to text and text to image api, it will have history , users , and prompt save.
+# REQUIREMENTS
+You need to have go install
 
 # INSTALLATION
 
@@ -6,10 +8,29 @@ This server will serve image to text and text to image api, it will have history
 
 Clone the repository then run , cd into it:
 
+Create .env files - In this .env file you should have the following :
+
+```bash
+API_TOKEN=<your-api-token>
+URL_TEXT_TO_IMAGE=https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0
+URL_IMAGE_TO_TEXT=https://api-inference.huggingface.co/models/nlpconnect/vit-gpt2-image-captioning
+URL_IMAGE_CLASSIFICATION=https://api-inference.huggingface.co/models/google/vit-base-patch16-224
+URL_TEXT_SUMMERIZATION=https://api-inference.huggingface.co/models/facebook/bart-large-cnn
+URL_TEXT_CLASSIFICATION=https://api-inference.huggingface.co/models/distilbert/distilbert-base-uncased-finetuned-sst-2-english
+SERVER_PORT=8080
+DB_USER=pguser
+DB_PASSWORD=pgpasswd
+DB_NAME=ai_database
+DB_HOST=localhost
+DB_PORT=5432
+```
+Then run the following command : 
+
 ```bash
 # For running postgresql in separate terminal
 docker compose up
 ```
+
 
 ## Second step ,the installation for go
 
@@ -32,7 +53,8 @@ go run ./migration/migration.go
 For usage , just run
 
 ```bash
-go mod run
+go mod build .
+go run .
 ```
 
 And that's it

@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"github.com/aronyaina/ia-goproject/config"
 	"github.com/aronyaina/ia-goproject/routers"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"log"
 )
 
 func main() {
@@ -20,6 +20,7 @@ func main() {
 	// r.Use(config.ApiMiddleware())
 	r.Use(cors.Default())
 	r.MaxMultipartMemory = 8 << 20
+	r.Static("/assets", "./assets")
 	routers.SetupUserRoutes(r)
 	routers.SetupImageRoutes(r, cfg)
 	routers.SetupTextRoutes(r, cfg)

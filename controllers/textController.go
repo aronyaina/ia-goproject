@@ -18,7 +18,7 @@ func TextGeneration(c *gin.Context, config *config.Config) {
 		return
 	}
 	var response []interface{}
-	response, err := services.TextToText(payload, config.Server.TextSummerization, config.Server.Token)
+	response, err := services.TextToText(payload, config.Server.TextGeneration, config.Server.Token)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

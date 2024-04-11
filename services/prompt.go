@@ -16,7 +16,6 @@ func CreatePrompt(c *gin.Context, tag string, input string, result string, user_
 		Tag:       tag,
 		Result:    result,
 		Input:     input,
-		UserID:    user_id,
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}

@@ -11,9 +11,7 @@ import (
 )
 
 type UserPayload struct {
-	Name     string `json:"name"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email string `json:"email"`
 }
 
 func CreateUser(c *gin.Context) {
@@ -24,9 +22,7 @@ func CreateUser(c *gin.Context) {
 	}
 	user := models.User{
 		ID:        uuid.New().String(),
-		Name:      payload.Name,
 		Email:     payload.Email,
-		Password:  payload.Password,
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}

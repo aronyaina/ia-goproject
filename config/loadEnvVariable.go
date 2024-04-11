@@ -23,6 +23,7 @@ type ServerConfig struct {
 	ImageClassification string `env:"URL_IMAGE_CLASSIFICATION"`
 	TextSummerization   string `env:"URL_TEXT_SUMMERIZATION"`
 	TextClassification  string `env:"URL_TEXT_CLASSIFICATION"`
+	TextGeneration      string `env:"URL_TEXT_GENERATION"`
 }
 
 type Config struct {
@@ -54,8 +55,9 @@ func LoadConfig() (*Config, error) {
 	imageClassification := viper.GetString("URL_IMAGE_CLASSIFICATION")
 	textSummerization := viper.GetString("URL_TEXT_SUMMERIZATION")
 	textClassification := viper.GetString("URL_TEXT_CLASSIFICATION")
+	textGeneration := viper.GetString("URL_TEXT_GENERATION")
 
-	if host == "" || port == "" || user == "" || password == "" || name == "" || serverPort == "" || token == "" || textToImage == "" || imageToText == "" || imageClassification == "" || textClassification == "" || textSummerization == "" {
+	if host == "" || port == "" || user == "" || password == "" || name == "" || serverPort == "" || token == "" || textToImage == "" || imageToText == "" || imageClassification == "" || textClassification == "" || textSummerization == "" || textGeneration == "" {
 		return nil, errors.New("Missing required environment variables .")
 	}
 
@@ -75,6 +77,7 @@ func LoadConfig() (*Config, error) {
 			ImageClassification: imageClassification,
 			TextSummerization:   textSummerization,
 			TextClassification:  textClassification,
+			TextGeneration:      textGeneration,
 		},
 	}
 

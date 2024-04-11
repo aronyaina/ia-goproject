@@ -11,6 +11,28 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func TextGeneration(c *gin.Context, config *config.Config) {
+	var payload services.Payload
+	if err := c.ShouldBindJSON(&payload); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	var response []interface{}
+	response, err := services.TextToText(payload, config.Server.TextSummerization, config.Server.Token)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	//slice, ok := response[0].(map[string]interface{})
+	//if !ok {
+	//	fmt.Println("Error while processing response")
+	//	return
+	//}
+
+	//services.CreatePrompt(c, "TEXT_GENERATION", payload.Inputs, slice["summary_text"].(string), c.Param("user_id"))
+	c.JSON(http.StatusOK, response[0])
+}
 func TextSummerization(c *gin.Context, config *config.Config) {
 	var payload services.Payload
 	if err := c.ShouldBindJSON(&payload); err != nil {
@@ -24,13 +46,13 @@ func TextSummerization(c *gin.Context, config *config.Config) {
 		return
 	}
 
-	slice, ok := response[0].(map[string]interface{})
-	if !ok {
-		fmt.Println("Error while processing response")
-		return
-	}
+	//slice, ok := response[0].(map[string]interface{})
+	//if !ok {
+	//	fmt.Println("Error while processing response")
+	//	return
+	//}
 
-	services.CreatePrompt(c, "TEXT_GENERATION", payload.Inputs, slice["summary_text"].(string), c.Param("user_id"))
+	//services.CreatePrompt(c, "TEXT_GENERATION", payload.Inputs, slice["summary_text"].(string), c.Param("user_id"))
 	c.JSON(http.StatusOK, response[0])
 }
 
@@ -60,8 +82,8 @@ func TextClassification(c *gin.Context, config *config.Config) {
 		result = fmt.Sprintf("%s%s,%f\n", result, label, score)
 	}
 	result = strings.TrimSuffix(result, "\n")
-	fmt.Println(result)
-	services.CreatePrompt(c, "TEXT_CLASSIFICAITON", payload.Inputs, result, c.Param("user_id"))
+	//fmt.Println(result)
+	//services.CreatePrompt(c, "TEXT_CLASSIFICAITON", payload.Inputs, result, c.Param("user_id"))
 
 	c.JSON(http.StatusOK, arr)
 

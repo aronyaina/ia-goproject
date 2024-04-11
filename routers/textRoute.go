@@ -9,10 +9,14 @@ import (
 func SetupTextRoutes(router *gin.Engine, config *config.Config) {
 	textRouter := router.Group("/texts")
 	{
-		textRouter.POST("/text/:user_id", func(c *gin.Context) {
+		textRouter.POST("/generation", func(c *gin.Context) {
+			controllers.TextGeneration(c, config)
+		})
+
+		textRouter.POST("/summerization", func(c *gin.Context) {
 			controllers.TextSummerization(c, config)
 		})
-		textRouter.POST("/classification/:user_id", func(c *gin.Context) {
+		textRouter.POST("/classification", func(c *gin.Context) {
 			controllers.TextClassification(c, config)
 		})
 
